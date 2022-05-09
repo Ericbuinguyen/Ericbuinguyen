@@ -1,17 +1,13 @@
 import project_menu
 from pymongo import MongoClient
 
-#selecting the proper mongoDB
 cluster = MongoClient("mongodb://localhost:27017/")
 db = cluster["Project"]
 
-#collection 1 is bands
 collection1 = db["main"]
 
-#collection2 is songs
 collection2 = db["podcasts"]
 
-#collection 3 is genres
 collection3 = db["shows"]
 
 project_menu.main_menu()
@@ -21,7 +17,7 @@ while menu_option != 0:
         item_input = int(input('Enter the item number: '))
         item = collection1.find_one({'item': item_input})
         print("\nProduct name: " + item['product_name'])
-        print("Quantity on hand: " + str(item['quantity']))
+        print("Quantity: " + str(item['quantity']))
         break
     elif menu_option == 2:
         project_menu.podcasts_menu()
@@ -46,15 +42,14 @@ while menu_option != 0:
         menu_option3 = int(input("Enter your option: "))
         while menu_option3 != 0:
             if menu_option3 == 1:
-                # Run through the entire collection, extract each sku number and product name from the document, print them in an f-string for readability
                 for x in collection3.find():
                     print(f"ITEM: {x['item']} | Product Name: {x['product_name']} | Quantity: {x['quantity_item']}")
                 exit()
             elif menu_option3 == 2:
-                temp_item = int(input('Enter a SKU number: '))
+                temp_item = int(input('Enter a item number: '))
                 temp_episodes = int(input('Enter quantity of episodes: '))
                 collection3.update_one({'item': temp_item}, {"$set": {'quantity_item': temp_episodes}})
-                print(f"You have successfully ordered {temp_episodes} units of item number {temp_item}")
+                print(f"You have successfully ordered {temp_episodes} of item number {temp_item}")
                 exit()
 
     else:
